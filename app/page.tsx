@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // SAHIFAGA O'TKAZISH UCHUN QO'SHILDI
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Eye, ShoppingCart, CheckCircle, Star, X, PartyPopper, ArrowLeft } from 'lucide-react';
+import { Heart, Eye, ShoppingCart, CheckCircle, Star, X } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -21,12 +22,10 @@ const products: Product[] = [
 ];
 
 export default function LuxuryStore() {
+  const router = useRouter(); // YO'NALTIRISHNI ISHGA TUSHIRAMIZ
   const [cart, setCart] = useState<Product[]>([]);
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [viewProduct, setViewProduct] = useState<Product | null>(null);
-  
-  // Forma va Validatsiya uchun state-lar
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '+998', address: '' });
   const [error, setError] = useState('');
 
@@ -37,13 +36,11 @@ export default function LuxuryStore() {
     e.preventDefault();
     setError('');
 
-    // 1. Ism validatsiyasi (3 harfdan ko'p bo'lishi kerak, ya'ni kamida 4)
     if (formData.name.trim().length < 4) {
       setError("Ismingiz juda qisqa. Kamida 4 ta harf kiriting.");
       return;
     }
 
-    // 2. Telefon validatsiyasi
     const digitsOnly = formData.phone.replace(/\D/g, '');
     if (!formData.phone.startsWith('+998')) {
       setError("Faqat O'zbekiston raqamlarini kiriting (+998).");
@@ -54,45 +51,12 @@ export default function LuxuryStore() {
       return;
     }
 
-    // Muvaffaqiyatli holat
-    setIsSubmitted(true);
-    setCart([]); // Savatni tozalaymiz
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // MUVAFFIQIYATLI BO'LGANDA /thanks SAHIFASIGA O'TKAZAMIZ
+    router.push(`/thanks?name=${formData.name}`);
   };
-
-  // --- THANK YOU SAHIFASI ---
-  if (isSubmitted) {
-    return (
-      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-6 text-white font-sans">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }} 
-          animate={{ opacity: 1, scale: 1 }} 
-          className="bg-slate-800/40 p-12 rounded-[50px] border border-blue-500/30 backdrop-blur-2xl max-w-lg text-center shadow-2xl"
-        >
-          <motion.div 
-            initial={{ y: 20 }} animate={{ y: 0 }}
-            className="w-24 h-24 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-emerald-500/20"
-          >
-            <PartyPopper size={48} className="text-white" />
-          </motion.div>
-          <h1 className="text-4xl font-black mb-4">Rahmat, {formData.name}!</h1>
-          <p className="text-slate-400 mb-10 leading-relaxed">
-            Sizning buyurtmangiz muvaffaqiyatli qabul qilindi. Operatorlarimiz tez orada <span className="text-blue-400 font-bold">{formData.phone}</span> raqami bilan bog'lanishadi.
-          </p>
-          <button 
-            onClick={() => { setIsSubmitted(false); setFormData({ name: '', phone: '+998', address: '' }); }}
-            className="group flex items-center gap-3 mx-auto px-8 py-4 bg-blue-600 rounded-2xl font-bold hover:bg-blue-700 transition-all active:scale-95"
-          >
-            <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform"/> Bosh sahifaga qaytish
-          </button>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white font-sans selection:bg-blue-500">
-      
       {/* 1. PREMIUM HEADER */}
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/70 border-b border-white/10 px-6 py-4 flex justify-between items-center">
         <div className="text-2xl font-black tracking-tighter bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent italic">
@@ -193,7 +157,7 @@ export default function LuxuryStore() {
         )}
       </AnimatePresence>
 
-      {/* 5. OTZIVLAR (Siz xohlagandek pastda) */}
+      {/* 5. OTZIVLAR */}
       <section className="py-20 px-6 bg-slate-900/50">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold mb-12 text-center text-slate-500 uppercase italic">Mijozlarimiz fikri</h2>
