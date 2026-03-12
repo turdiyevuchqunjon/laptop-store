@@ -23,15 +23,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// ... metadata qismi ...
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uz">
       <head>
-        {/* 2. META PIXEL (Noscript qismi) */}
+        {/* Noscript qismini Head ichiga qo'yamiz */}
         <noscript>
           <img
             height="1"
@@ -41,11 +39,11 @@ export default function RootLayout({
           />
         </noscript>
       </head>
-      <body className={inter.className}>
-        {/* 3. META PIXEL (Asosiy Skript qismi) */}
+      <body>
+        {/* Script qismini Body boshiga qo'yamiz va strategy'ni o'zgartiramiz */}
         <Script
           id="fb-pixel"
-          strategy="afterInteractive"
+          strategy="beforeInteractive" // Sayt ishlashidan oldin yuklanishi uchun
           dangerouslySetInnerHTML={{
             __html: `
               !function(f,b,e,v,n,t,s)
@@ -61,7 +59,6 @@ export default function RootLayout({
             `,
           }}
         />
-        
         {children}
       </body>
     </html>

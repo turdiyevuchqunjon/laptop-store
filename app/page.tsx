@@ -50,6 +50,15 @@ export default function LuxuryStore() {
       setError("Telefon raqami to'liq emas. 9 ta raqam bo'lishi shart.");
       return;
     }
+    // --- META EVENTNI SHU YERDA CHAQIRAMIZ ---
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'Laptop Order',
+        value: 0.00, // Agar summa kerak bo'lsa yozasiz
+        currency: 'USD'
+      });
+      console.log("Meta Pixel: Lead event yuborildi");
+    }
 
     // MUVAFFIQIYATLI BO'LGANDA /thanks SAHIFASIGA O'TKAZAMIZ
     router.push(`/thanks?name=${formData.name}`);
