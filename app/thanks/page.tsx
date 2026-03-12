@@ -18,7 +18,7 @@ export default function ThankYouPage() {
 
     // 0 bo'lganda Telegramga o'tkazish
     if (seconds === 0) {
-      window.location.href = "https://t.me/your_telegram_link"; // SHU YERGA TELEGRAM LINKINGIZNI QO'YING
+      window.location.href = "https://t.me/Arzon_texnika_sam"; // SHU YERGA TELEGRAM LINKINGIZNI QO'YING
     }
 
     return () => clearInterval(timer);
